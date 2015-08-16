@@ -1,0 +1,22 @@
+<div id="formCadastro" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Cadastro de Cliente</h4>
+            </div>
+            <div class="modal-body">
+				<form name="formCadastro" class="form">
+					<input type="text" class="form-control" ng-model="cliente.nome" ng-required="true" name="nome" placeholder="Nome"/>
+					<input type="text" class="form-control" ng-model="cliente.cpf" ng-required="true" name="cpf" placeholder="CPF"/>
+					<input type="text" class="form-control" ng-model="cliente.endereco" name="endereco" placeholder="Endereço"/>
+					<input type="text" class="form-control" ng-model="cliente.telefone" name="telefone" placeholder="Telefone"/>					
+				</form>				
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+				<button class="btn btn-primary" ng-click="cadastrarCliente(cliente)">Salvar</button>
+            </div>
+        </div>
+    </div>
+ </div>

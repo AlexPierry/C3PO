@@ -1,0 +1,6 @@
+{"produto":
+	[
+		{"descricao": "coca-cola", "idProduto": "1", "vlProduto":"3.5"},
+		{"descricao": "fanta", "idProduto": "2", "vlProduto":"4.0"}
+	]
+}

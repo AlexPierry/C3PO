@@ -1,0 +1,22 @@
+{"pedidos":[
+	{"idPedido": 1, "dataPedido": "01/05/2015", "vlTotalPedido": "45.00", "status":"F", 
+		"cliente":{"nomeCliente":"Alex Pierry", "cpf":"123", "endereco":"Rua das Flores, 0", "telefone": "12356789"}, 
+		"funcionario": {"nomeFuncionario":"João dos Santos", "cpf":"11122233344"},
+		"itensPedido":
+			[
+				{"idPedido": 1, "quantidade": 1, "produto": {"vlProduto": "15.00", "idProduto": 1, "descricao": "coca-cola"}},
+				{"idPedido": 1, "quantidade": 2, "produto": {"vlProduto": "15.00", "idProduto": 2, "descricao": "fanta"}}
+			]
+		
+	},
+	{"idPedido": 2, "dataPedido": "03/06/2015", "vlTotalPedido": "57.80", "status":"A",
+		"cliente":{"nomeCliente":"Alex Pierry", "cpf":"123", "endereco":"Rua das Flores, 0", "telefone": "12356789"}, 
+		"funcionario": {"nomeFuncionario":"João dos Santos", "cpf":"11122233344"},
+		"itensPedido":
+			[
+				{"idPedido": 2, "quantidade": 2, "produto": {"vlProduto": "15.00", "idProduto": 1, "descricao": "coca-cola"}},
+				{"idPedido": 2, "quantidade": 1, "produto": {"vlProduto": "10.00", "idProduto": 2, "descricao": "fanta"}}
+			]
+		
+	}
+]}

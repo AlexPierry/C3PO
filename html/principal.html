@@ -1,0 +1,10 @@
+<div class="jumbotron" ng-init="loadFuncionarios()">
+	<div class="form-inline">
+		<h2>Seja bem-vindo!</h2>
+		<br/>
+		<select class="form-control" ng-model="funcionario" ng-options="funcionario.nomeFuncionario for funcionario in funcionarios">
+			<option value="">Selecione o funcion&aacute;rio do atendimento</option>
+		</select>
+		<button class="btn btn-primary" ng-click="setFuncionario(funcionario)" ng-disabled="!funcionario">Associar</button>		
+	</div>
+</div>

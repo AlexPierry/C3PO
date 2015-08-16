@@ -1,0 +1,105 @@
+<div class="container">
+	<div class="form-inline">
+		<p class="lead" ng-show="!cadastroLocalizado">Por favor, informe seu CPF para buscarmos seus dados</p>
+		<div class="form-group">
+			<input class="form-control" type="text" ng-model="cpf" ng-show="!cadastroLocalizado" placeholder="CPF"/>
+		</div>
+		<button class="btn btn-default" ng-click="localizarCliente(cpf)" ng-show="!cadastroLocalizado">Localizar cadastro</button>	
+	</div>
+</div>
+
+<span ng-show="cpfNaoEncontrado">
+	<div class="container">
+		<br/>
+		<p>N&atilde;o encontramos nenhum cadastro com o CPF informado.</p>
+		<p>Gostaria de se cadastrar agora?</p>
+		<button class="btn btn-primary" ng-click="abrirFormCadastro()">Realizar Cadastro</button>	
+	</div>
+</span>
+
+</div class="container">
+	<p class="lead" ng-show="cadastroLocalizado">&Uacute;ltimos Pedidos</p>
+	<button class="btn btn-primary" ng-click="showFormPedido(true)" ng-show="cadastroLocalizado">Novo Pedido</button>	
+	<table class="table table-hover" ng-show="cadastroLocalizado">
+		<thead>
+			<tr>
+				<th><a href="" ng-click="ordernarPor='dataPedido';direcao=!direcao">Data</a></th>
+				<th><a href="" ng-click="ordernarPor='vlTotalPedido';direcao=!direcao">Valor</a></th>				
+				<th>Status</th>
+				<th>Itens</th>
+			</tr>
+		</thread>
+		<tr ng-repeat="pedido in pedidos | filter:criterio | orderBy:ordenarPor:direcao">
+			<td>{{pedido.dataPedido | date:'dd/MM/yyyy HH:mm'}}</td>
+			<td>{{pedido.vlTotalPedido | currency:"R$ "}}</td>			
+			<td>
+				<span title="Pedido fechado" ng-show="(pedido.status=='F')" class="glyphicon glyphicon-folder-close"></span>
+				<span title="Pedido aberto" ng-show="(pedido.status=='A')" class="glyphicon glyphicon-folder-open"></span>
+			</td>
+			<td>
+				<a href ng-click="visualizarPedido(pedido)"><span title="Visualizar itens do pedido" class="glyphicon glyphicon-list-alt"></span></a>
+			</td>
+		</tr>
+	</table>	
+</div>
+
+<div id="formPedido" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Pedido {{pedido.idPedido}}</h4>
+            </div>
+            <div class="modal-body" ng-init="loadProdutos()">
+				<form name="formProduto" class="form-inline" ng-show="(pedido.status == 'A')">
+					<select class="form-control" ng-model="itemPedido.produto" ng-options="produto as produto.descricao for produto in produtos">
+						<option value="">Selecione o produto</option>
+					</select>
+					<input type="number" ng-model="itemPedido.quantidade" class="form-control" min="0" name="quantidade" ng-required="true" placeholder="Quantidade"/>
+					<button class="btn btn-primary" ng-click="adicionarItemPedido(itemPedido)" ng-disabled="!(itemPedido.produto) || !(itemPedido.quantidade)">Inserir</button>
+				</form>
+
+				<table class="table table-condensed">
+					<thead>
+						<tr>
+							<th>Item</a></th>
+							<th>Quantidade</a></th>
+							<th>Valor</th>
+							<th></th>
+						</tr>
+					</thread>
+					<tr ng-repeat="item in pedido.itensPedido">
+						<td>{{item.produto.descricao}}</td>
+						<td>
+							{{item.quantidade}}
+							&nbsp;
+							<span ng-show="(pedido.status == 'A')">
+								<a href ng-click="alterarQuantidadeItem(item, 'soma')"><span class="glyphicon glyphicon-plus"></span></a>
+							</span>
+							<span ng-show="(pedido.status == 'A')">
+								<a href ng-click="alterarQuantidadeItem(item, 'subtracao')"><span class="glyphicon glyphicon-minus"></span></a>
+							</span>								
+						</td>
+						<td>{{item.produto.vlProduto * item.quantidade | currency:"R$ "}}</td>
+						<td ng-show="(pedido.status == 'A')">
+							<a href ng-click="excluirItemPedido(item.idProduto)"><span class="glyphicon glyphicon-remove"></span></a>
+						</td>
+					</tr>
+					<tfoot>
+						<tr>
+					     	<th colspan="2">Valor do Pedido</th>
+					     	<th>{{pedido.vlTotalPedido | currency:"R$ "}}</th>
+					    </tr>
+					</tfoot>					
+				</table>				
+				
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Sair</button>
+				<button class="btn btn-primary" ng-click="finalizarPedido(pedido)" ng-show="(pedido.status == 'A')">Finalizar Pedido</button>
+            </div>
+        </div>
+    </div>
+ </div>    
+
+ <div ng-include="'html/cadastro.html'"></div>
