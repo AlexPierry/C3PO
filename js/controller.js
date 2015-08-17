@@ -5,8 +5,8 @@ app.controller("pedidosCtrl", function($scope, $rootScope, $http){
 		if (!$rootScope.funcionarios)
 		{
 			$scope.showLoader();
-			$http.get($scope.server("/funcionarios/" +  "funcionarios.json")).success(function(data){
-				$rootScope.funcionarios = data.funcionario;
+			$http.get($scope.server("/funcionarios")).success(function(data){
+				$rootScope.funcionarios = data;
 				$scope.hideLoader();
 			});
 		}			
@@ -14,14 +14,13 @@ app.controller("pedidosCtrl", function($scope, $rootScope, $http){
 
 	$scope.loadProdutos = function(){
 		$scope.showLoader();
-		$http.get($scope.server("/produtos/" +  "produtos.json")).success(function(data){
-			$rootScope.produtos = data.produto;
+		$http.get($scope.server("/produtos")).success(function(data){
+			$rootScope.produtos = data;
 			$scope.hideLoader();
 		});		
 	}
 
-	$scope.setFuncionario = function(funcionario)
-	{
+	$scope.setFuncionario = function(funcionario){
 		$rootScope.funcionario = funcionario;
 	}
 
@@ -35,17 +34,17 @@ app.controller("pedidosCtrl", function($scope, $rootScope, $http){
 		pedido.funcionario = $rootScope.funcionario;
 		pedido.itensPedido = [];
 
-		//$http.post($scope.server("/pedidos/" + $rootScope.cliente.cpf + ".json"), pedido).success(function(data){
-			$rootScope.pedidos.push(pedido); //data.pedido);
-			$rootScope.pedido = pedido;//data.pedido;
+		$http.post($scope.server("/pedidos/" + $rootScope.cliente.cpf), pedido).success(function(data){
+			$scope.loadPedidos();
+			$rootScope.pedido = data.pedido;//data.pedido;
 			$scope.hideLoader();
-		//});				
+		});				
 		//$scope.formPedidos.$setPristine(true);
 	}
 
 	$scope.localizarCliente = function(cpf){
 		$scope.showLoader();
-		$http.get($scope.server("/clientes/" + cpf + ".json")).then(
+		$http.get($scope.server("/clientes/" + cpf)).then(
 			function(response){
 				if (response.data.cpf) {
 					$rootScope.cadastroLocalizado = true;
@@ -68,8 +67,8 @@ app.controller("pedidosCtrl", function($scope, $rootScope, $http){
 
 	$scope.loadPedidos = function(){
 		$scope.showLoader();
-		$http.get($scope.server("/pedidos/" + $rootScope.cliente.cpf + ".json")).success(function(data){
-			$rootScope.pedidos = data.pedidos;
+		$http.get($scope.server("/pedidos/" + $rootScope.cliente.cpf)).success(function(data){
+			$rootScope.pedidos = data;
 			$scope.hideLoader();
 		});		
 	}
@@ -79,26 +78,25 @@ app.controller("pedidosCtrl", function($scope, $rootScope, $http){
 		$scope.showFormPedido();
 	}
 
-	$scope.adicionarItemPedido = function(itemPedido)
-	{
+	$scope.adicionarItemPedido = function(itemPedido){
 		itemPedido.idPedido = $rootScope.pedido.idPedido;
 		$scope.showLoader();
-		//$http.post($scope.server("/pedidos/" + cpfCliente + "/" + itemPedido.idPedido + "/" + itemPedido.idProduto)).success(function(data){
+		$http.post($scope.server("/pedidos/" + $rootScope.cliente.cpf + "/" + itemPedido.idPedido + "/" + itemPedido.produto.idProduto), itemPedido.quantidade).success(function(data){
 			$rootScope.pedido.itensPedido.push(angular.copy(itemPedido));
 			$rootScope.pedido.vlTotalPedido += itemPedido.quantidade * itemPedido.produto.vlProduto;
 			delete $scope.itemPedido;
 			$scope.hideLoader();
-		//});		
+		});		
 	}
 
 	$scope.excluirItemPedido = function(itemPedido){
 		$scope.showLoader();
-		//$http.delete($scope.server("/pedidos/" + $rootScope.cliente.cpfCliente + "/" + itemPedido.idPedido + "/" + itemPedido.idProduto)).success(function(data){
+		$http.delete($scope.server("/pedidos/" + $rootScope.cliente.cpf + "/" + itemPedido.idPedido + "/" + itemPedido.produto.idProduto)).success(function(data){
 			alert("Excluído com sucesso");
 			var index = $rootScope.pedido.itensPedido.indexOf(itemPedido);
 			$rootScope.pedido.itensPedido.splice(index, 1);
 			$scope.hideLoader();
-		//});
+		});
 	}
 
 	$scope.alterarQuantidadeItem = function(itemPedido, operacao)
@@ -113,17 +111,21 @@ app.controller("pedidosCtrl", function($scope, $rootScope, $http){
 		}
 		
 		$scope.showLoader();
-		//$http.put($scope.server("/pedidos/" + $rootScope.cliente.cpfCliente + "/" + itemPedido.idPedido + "/" + itemPedido.idProduto), itemPedido.quantidade).success(function(data){
+		$http.put($scope.server("/pedidos/" + $rootScope.cliente.cpf + "/" + itemPedido.idPedido + "/" + itemPedido.produto.idProduto), itemPedido.quantidade).success(function(data){
 			var index = $rootScope.pedido.itensPedido.indexOf(itemPedido);
 			$rootScope.pedido.itensPedido.splice(index, 1);
 			$rootScope.pedido.itensPedido.splice(index, 0, itemPedido);
 			$scope.hideLoader();
-		//});		
+		});		
 	}
 
-	$scope.finalizarPedido = function()
-	{
-		
+	$scope.finalizarPedido = function(pedido)	{
+		$scope.showLoader();
+		$http.put($scope.server("/pedidos/" + $rootScope.cliente.cpf + "/" + pedido.idPedido + "/finalizar")).success(function(data){
+			$("#formPedido").modal('hide');
+			$scope.loadPedidos();
+			$scope.hideLoader();
+		});
 	}
 
 	$scope.showFormPedido = function(novo)
