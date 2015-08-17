@@ -82,7 +82,7 @@
 						</td>
 						<td>{{item.produto.vlProduto * item.quantidade | currency:"R$ "}}</td>
 						<td ng-show="(pedido.status == 'A')">
-							<a href ng-click="excluirItemPedido(item.idProduto)"><span class="glyphicon glyphicon-remove"></span></a>
+							<a href ng-click="excluirItemPedido(item)"><span class="glyphicon glyphicon-remove"></span></a>
 						</td>
 					</tr>
 					<tfoot>
