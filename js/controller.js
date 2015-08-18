@@ -22,8 +22,8 @@ app.controller("pedidosCtrl", function($scope, $rootScope, $http){
 
 	$scope.setFuncionario = function(funcionario){
 		$rootScope.funcionario = funcionario;
-		$(window.document.location).attr('href','/restaurante/#/pedidos');
-	}
+		$(window.document.location).attr('href','/restaurante/#/pedidos');  
+	} 
 
 	$scope.incluirPedido = function(){
 		$scope.showLoader();
@@ -37,7 +37,7 @@ app.controller("pedidosCtrl", function($scope, $rootScope, $http){
 
 		$http.post($scope.server("/pedidos/" + $rootScope.cliente.cpf), pedido).success(function(data){
 			$scope.loadPedido(data);
-		});				
+		});	
 		//$scope.formPedidos.$setPristine(true);
 	}
 
@@ -136,8 +136,7 @@ app.controller("pedidosCtrl", function($scope, $rootScope, $http){
 		});
 	}
 
-	$scope.showFormPedido = function(novo)
-	{
+	$scope.showFormPedido = function(novo) {
 		if (novo){
 			$scope.incluirPedido();
 		}
@@ -145,9 +144,13 @@ app.controller("pedidosCtrl", function($scope, $rootScope, $http){
 		$("#formPedido").modal('show');
 	}
 
-	$scope.abrirFormCadastro = function()
-	{
+	$scope.abrirFormCadastro = function() {
 		$("#formCadastro").modal('show');
+	}
+	
+	$scope.fecharModal = function(){
+		$("#formPedido").modal('hide');
+		$scope.loadPedidos();
 	}
 
 	$scope.cadastrarCliente = function(cliente){
@@ -157,5 +160,6 @@ app.controller("pedidosCtrl", function($scope, $rootScope, $http){
 			$scope.localizarCliente(cliente.cpf);
 			$scope.hideLoader();
 		});	
+		
 	}
 });
