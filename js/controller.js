@@ -35,9 +35,7 @@ app.controller("pedidosCtrl", function($scope, $rootScope, $http){
 		pedido.itensPedido = [];
 
 		$http.post($scope.server("/pedidos/" + $rootScope.cliente.cpf), pedido).success(function(data){
-			$scope.loadPedidos();
-			$rootScope.pedido = data.pedido;//data.pedido;
-			$scope.hideLoader();
+			$scope.loadPedido(data);
 		});				
 		//$scope.formPedidos.$setPristine(true);
 	}
@@ -72,6 +70,14 @@ app.controller("pedidosCtrl", function($scope, $rootScope, $http){
 			$scope.hideLoader();
 		});		
 	}
+	
+	$scope.loadPedido = function(idPedido){
+		$scope.showLoader();
+		$http.get($scope.server("/pedidos/" + $rootScope.cliente.cpf + "/" + idPedido)).success(function(data){
+			$rootScope.pedido = data;
+			$scope.hideLoader();
+		});		
+	}
 
 	$scope.visualizarPedido = function(pedido){
 		$rootScope.pedido = pedido;
@@ -92,9 +98,9 @@ app.controller("pedidosCtrl", function($scope, $rootScope, $http){
 	$scope.excluirItemPedido = function(itemPedido){
 		$scope.showLoader();
 		$http.delete($scope.server("/pedidos/" + $rootScope.cliente.cpf + "/" + itemPedido.idPedido + "/" + itemPedido.produto.idProduto)).success(function(data){
-			alert("Excluído com sucesso");
 			var index = $rootScope.pedido.itensPedido.indexOf(itemPedido);
 			$rootScope.pedido.itensPedido.splice(index, 1);
+			$rootScope.pedido.vlTotalPedido -= itemPedido.quantidade * itemPedido.produto.vlProduto;
 			$scope.hideLoader();
 		});
 	}
@@ -115,6 +121,7 @@ app.controller("pedidosCtrl", function($scope, $rootScope, $http){
 			var index = $rootScope.pedido.itensPedido.indexOf(itemPedido);
 			$rootScope.pedido.itensPedido.splice(index, 1);
 			$rootScope.pedido.itensPedido.splice(index, 0, itemPedido);
+			$scope.loadPedidos();
 			$scope.hideLoader();
 		});		
 	}
