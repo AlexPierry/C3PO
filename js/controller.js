@@ -149,4 +149,12 @@ app.controller("pedidosCtrl", function($scope, $rootScope, $http){
 		$("#formCadastro").modal('show');
 	}
 
+	$scope.cadastrarCliente = function(cliente){
+		$scope.showLoader();
+		$http.post($scope.server("/clientes"), cliente).success(function(data){
+			$("#formCadastro").modal('hide');
+			$scope.localizarCliente(cliente.cpf);
+			$scope.hideLoader();
+		});	
+	}
 });
