@@ -22,6 +22,7 @@ app.controller("pedidosCtrl", function($scope, $rootScope, $http){
 
 	$scope.setFuncionario = function(funcionario){
 		$rootScope.funcionario = funcionario;
+		$(window.document.location).attr('href','/restaurante/#/pedidos');
 	}
 
 	$scope.incluirPedido = function(){
