@@ -22,7 +22,7 @@ app.controller("pedidosCtrl", function($scope, $rootScope, $http){
 
 	$scope.setFuncionario = function(funcionario){
 		$rootScope.funcionario = funcionario;
-		$(window.document.location).attr('href','/restaurante/#/pedidos');  
+		$(window.document.location).attr('href','#/pedidos');  
 	} 
 
 	$scope.incluirPedido = function(){
@@ -77,6 +77,7 @@ app.controller("pedidosCtrl", function($scope, $rootScope, $http){
 		$http.get($scope.server("/pedidos/" + $rootScope.cliente.cpf + "/" + idPedido)).success(function(data){
 			$rootScope.pedido = data;
 			$scope.hideLoader();
+			$("#formPedido").modal('show');
 		});		
 	}
 
@@ -113,8 +114,15 @@ app.controller("pedidosCtrl", function($scope, $rootScope, $http){
 			itemPedido.quantidade++;
 		}
 		else {
-			$rootScope.pedido.vlTotalPedido -= parseFloat(itemPedido.produto.vlProduto);
-			itemPedido.quantidade--;
+			if (itemPedido.quantidade == 1)
+			{
+				$scope.excluirItemPedido(itemPedido);
+			}
+			else
+			{
+				$rootScope.pedido.vlTotalPedido -= parseFloat(itemPedido.produto.vlProduto);
+				itemPedido.quantidade--;
+			}
 		}
 		
 		$scope.showLoader();
@@ -140,8 +148,10 @@ app.controller("pedidosCtrl", function($scope, $rootScope, $http){
 		if (novo){
 			$scope.incluirPedido();
 		}
-
-		$("#formPedido").modal('show');
+		else
+		{
+			$("#formPedido").modal('show');
+		}
 	}
 
 	$scope.abrirFormCadastro = function() {

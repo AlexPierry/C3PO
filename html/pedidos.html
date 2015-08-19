@@ -2,9 +2,11 @@
 	<div class="form-inline">
 		<p class="lead" ng-show="!cadastroLocalizado">Por favor, informe seu CPF para buscarmos seus dados</p>
 		<div class="form-group">
-			<input class="form-control" type="text" ng-model="cpf" ng-show="!cadastroLocalizado" placeholder="CPF"/>
+			<input class="form-control" type="number" ng-model="cpf" ng-show="!cadastroLocalizado" placeholder="CPF"/>
 		</div>
-		<button class="btn btn-default" ng-click="localizarCliente(cpf)" ng-show="!cadastroLocalizado">Localizar cadastro</button>	
+		<button class="btn btn-default" ng-click="localizarCliente(cpf)" ng-show="!cadastroLocalizado">
+			<span class="glyphicon glyphicon-search"></span>Localizar cadastro
+		</button>
 	</div>
 </div>
 
@@ -17,21 +19,23 @@
 	</div>
 </span>
 
-</div class="container">
+<div class="container">
 	<p class="lead" ng-show="cadastroLocalizado">&Uacute;ltimos Pedidos</p>
 	<button class="btn btn-primary" ng-click="showFormPedido(true)" ng-show="cadastroLocalizado">Novo Pedido</button>	
-	<table class="table table-hover" ng-show="cadastroLocalizado">
+	<table class="table table-fixed" ng-show="cadastroLocalizado">
 		<thead>
 			<tr>
 				<th><a href="" ng-click="ordernarPor='dataPedido';direcao=!direcao">Data</a></th>
 				<th><a href="" ng-click="ordernarPor='vlTotalPedido';direcao=!direcao">Valor</a></th>				
+				<th><a href="" ng-click="ordernarPor='nomeFuncionario';direcao=!direcao">Funcion&aacute;rio</a></th>
 				<th>Status</th>
 				<th>Itens</th>
 			</tr>
 		</thread>
 		<tr ng-repeat="pedido in pedidos | filter:criterio | orderBy:ordenarPor:direcao">
 			<td>{{pedido.dataPedido | date:'dd/MM/yyyy HH:mm'}}</td>
-			<td>{{pedido.vlTotalPedido | currency:"R$ "}}</td>			
+			<td>{{pedido.vlTotalPedido | currency:"R$ "}}</td>
+			<td>{{pedido.funcionario.nomeFuncionario}}</td>
 			<td>
 				<span title="Pedido fechado" ng-show="(pedido.status=='F')" class="glyphicon glyphicon-folder-close"></span>
 				<span title="Pedido aberto" ng-show="(pedido.status=='A')" class="glyphicon glyphicon-folder-open"></span>

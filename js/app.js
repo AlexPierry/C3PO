@@ -1,4 +1,4 @@
-SERVER_URL = "http://localhost/restaurante"
+SERVER_URL = "http://127.0.0.1:8080/C3PO"
 
 var app = angular.module("restaurante", ['ngRoute']);
 
