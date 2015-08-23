@@ -1,4 +1,0 @@
-{"idPedido": 2, "cpfCliente":"123", "cpfFuncionario":"000", "vlTotalPedido":57.80, "dataPedido":"03/06/2015", "status":"A", "itensPedido":[
-	{"idPedido": 2, "idProduto": 1, "quantidade": 2, "valor": 20.00},
-	{"idPedido": 2, "idProduto": 2, "quantidade": 5, "valor": 37.80}	
-]}
